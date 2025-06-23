@@ -17,7 +17,7 @@
 /* 呼び出し規約 */
 
 #if defined(_WIN64) || defined(_M_X64) || defined(__amd64__) || defined(__x86_64__) || defined(__APPLE__) || \
-	defined(__ANDROID__) || defined(ANDROID) || defined(__linux__) || defined(NN_NINTENDO_SDK)
+    defined(__ANDROID__) || defined(ANDROID) || defined(__linux__) || defined(NN_NINTENDO_SDK)
 #define AILIA_API
 #else
 #define AILIA_API __stdcall
@@ -191,6 +191,21 @@ extern "C" {
 #define AILIA_SPEECH_VAD_TYPE_SILERO (0)
 
 /****************************************************************
+ * DIARIZATION定義
+ **/
+
+/**
+ * \~japanese
+ * @def AILIA_SPEECH_DIARIZATION_TYPE_PYANNOTE_AUDIO
+ * @brief PyannoteAudio
+ *
+ * \~english
+ * @def AILIA_SPEECH_DIARIZATION_TYPE_PYANNOTE_AUDIO
+ * @brief PyannoteAudio
+ */
+#define AILIA_SPEECH_DIARIZATION_TYPE_PYANNOTE_AUDIO (0)
+
+/****************************************************************
  * 辞書定義
  **/
 
@@ -254,12 +269,12 @@ extern "C" {
  * APIコールバック定義
  **/
 
-//接続が必要なAPI
+// 接続が必要なAPI
 
 #if defined(_WIN32) && !defined(_WIN64)
-	#define AILIA_SPEECH_USER_API __stdcall
+#define AILIA_SPEECH_USER_API __stdcall
 #else
-	#define AILIA_SPEECH_USER_API
+#define AILIA_SPEECH_USER_API
 #endif
 
 // ailia.audio API
@@ -269,52 +284,51 @@ typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_AUDIO_RESAMPLE)(v
 typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_AUDIO_GET_RESAMPLE_LEN)(int*, int, int, int);
 
 // ailia.tokenizer API
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_CREATE)(struct AILIATokenizer** , int, int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_OPEN_MODEL_FILE_A)(struct AILIATokenizer* , const char *);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_OPEN_MODEL_FILE_W)(struct AILIATokenizer* , const wchar_t *);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_ENCODE)(struct AILIATokenizer* , const char *);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_GET_TOKEN_COUNT)(struct AILIATokenizer* , unsigned int*);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_GET_TOKENS)(struct AILIATokenizer* , int* , unsigned int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_DECODE)(struct AILIATokenizer* , const int *, unsigned int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_GET_TEXT_LENGTH)(struct AILIATokenizer* , unsigned int*);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_GET_TEXT)(struct AILIATokenizer* , char* , unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_CREATE)(struct AILIATokenizer**, int, int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_OPEN_MODEL_FILE_A)(struct AILIATokenizer*, const char*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_OPEN_MODEL_FILE_W)(struct AILIATokenizer*, const wchar_t*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_ENCODE)(struct AILIATokenizer*, const char*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_GET_TOKEN_COUNT)(struct AILIATokenizer*, unsigned int*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_GET_TOKENS)(struct AILIATokenizer*, int*, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_DECODE)(struct AILIATokenizer*, const int*, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_GET_TEXT_LENGTH)(struct AILIATokenizer*, unsigned int*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_GET_TEXT)(struct AILIATokenizer*, char*, unsigned int);
 typedef void(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_DESTROY)(struct AILIATokenizer*);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_UTF8_TO_UTF32)(unsigned int* , unsigned int* , const char* , unsigned int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_UTF32_TO_UTF8)(char* , unsigned int* , unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_UTF8_TO_UTF32)(unsigned int*, unsigned int*, const char*, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_TOKENIZER_UTF32_TO_UTF8)(char*, unsigned int*, unsigned int);
 
 // ailia API
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_CREATE)(struct AILIANetwork **, int, int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_OPEN_WEIGHT_FILE_A)(struct AILIANetwork *, const char *);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_OPEN_WEIGHT_FILE_W)(struct AILIANetwork *, const wchar_t *);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_OPEN_WEIGHT_MEM)(struct AILIANetwork *, const void *, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_CREATE)(struct AILIANetwork**, int, int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_OPEN_WEIGHT_FILE_A)(struct AILIANetwork*, const char*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_OPEN_WEIGHT_FILE_W)(struct AILIANetwork*, const wchar_t*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_OPEN_WEIGHT_MEM)(struct AILIANetwork*, const void*, unsigned int);
 typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_SET_MEMORY_MODE)(struct AILIANetwork*, unsigned int);
-typedef void(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_DESTROY)(struct AILIANetwork *);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_UPDATE)(struct AILIANetwork *);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_BLOB_INDEX_BY_INPUT_INDEX)(struct AILIANetwork *, unsigned int *, unsigned int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_BLOB_INDEX_BY_OUTPUT_INDEX)(struct AILIANetwork *, unsigned int *, unsigned int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_BLOB_DATA)(struct AILIANetwork *, void*, unsigned int, unsigned int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_SET_INPUT_BLOB_DATA)(struct AILIANetwork *, const void*, unsigned int, unsigned int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_SET_INPUT_BLOB_SHAPE)(struct AILIANetwork *, const AILIAShape*, unsigned int, unsigned int);
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_BLOB_SHAPE)(struct AILIANetwork *, AILIAShape*, unsigned int, unsigned int);
-typedef const char*(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_ERROR_DETAIL)(struct AILIANetwork *);
+typedef void(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_DESTROY)(struct AILIANetwork*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_UPDATE)(struct AILIANetwork*);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_BLOB_INDEX_BY_INPUT_INDEX)(struct AILIANetwork*, unsigned int*, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_BLOB_INDEX_BY_OUTPUT_INDEX)(struct AILIANetwork*, unsigned int*, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_BLOB_DATA)(struct AILIANetwork*, void*, unsigned int, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_SET_INPUT_BLOB_DATA)(struct AILIANetwork*, const void*, unsigned int, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_SET_INPUT_BLOB_SHAPE)(struct AILIANetwork*, const AILIAShape*, unsigned int, unsigned int);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_BLOB_SHAPE)(struct AILIANetwork*, AILIAShape*, unsigned int, unsigned int);
+typedef const char*(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_ERROR_DETAIL)(struct AILIANetwork*);
 typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_COPY_BLOB_DATA)(struct AILIANetwork* dst_net, unsigned int dst_blob_idx, struct AILIANetwork* src_net, unsigned int src_blob_idx);
-typedef int (AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_ENVIRONMENT)(AILIAEnvironment** env, unsigned int env_idx, unsigned int version);
-
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_AILIA_GET_ENVIRONMENT)(AILIAEnvironment** env, unsigned int env_idx, unsigned int version);
 
 /**
-* \~japanese
-* @def AILIA_SPEECH_API_CALLBACK_VERSION
-* @brief 構造体バージョン
-*
-* \~english
-* @def AILIA_SPEECH_API_CALLBACK_VERSION
-* @brief Struct version
-*/
+ * \~japanese
+ * @def AILIA_SPEECH_API_CALLBACK_VERSION
+ * @brief 構造体バージョン
+ *
+ * \~english
+ * @def AILIA_SPEECH_API_CALLBACK_VERSION
+ * @brief Struct version
+ */
 #define AILIA_SPEECH_API_CALLBACK_VERSION (6)
 
 /* APIコールバック関数構造体 */
 typedef struct _AILIASpeechApiCallback {
-	AILIA_SPEECH_USER_API_AILIA_AUDIO_GET_FRAME_LEN  ailiaAudioGetFrameLen;
+	AILIA_SPEECH_USER_API_AILIA_AUDIO_GET_FRAME_LEN ailiaAudioGetFrameLen;
 	AILIA_SPEECH_USER_API_AILIA_AUDIO_GET_MEL_SPECTROGRAM ailiaAudioGetMelSpectrogram;
 	AILIA_SPEECH_USER_API_AILIA_AUDIO_RESAMPLE ailiaAudioResample;
 	AILIA_SPEECH_USER_API_AILIA_AUDIO_GET_RESAMPLE_LEN ailiaAudioGetResampleLen;
@@ -367,7 +381,7 @@ typedef struct _AILIASpeechApiCallback {
  * @return
  *   Return 0 to continue, non-zero to abort inference.
  */
-typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_INTERMEDIATE_CALLBACK)(void *handle, const char *text);
+typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_INTERMEDIATE_CALLBACK)(void* handle, const char* text);
 
 /****************************************************************
  * ネットワークオブジェクトのインスタンス
@@ -376,24 +390,35 @@ typedef int(AILIA_SPEECH_USER_API* AILIA_SPEECH_USER_API_INTERMEDIATE_CALLBACK)(
 struct AILIASpeech;
 
 /**
-* \~japanese
-* @def AILIA_SPEECH_TEXT_VERSION
-* @brief 構造体バージョン
-*
-* \~english
-* @def AILIA_SPEECH_TEXT_VERSION
-* @brief Struct version
-*/
+ * \~japanese
+ * @def AILIA_SPEECH_TEXT_VERSION
+ * @brief 構造体バージョン
+ *
+ * \~english
+ * @def AILIA_SPEECH_TEXT_VERSION
+ * @brief Struct version
+ */
 #define AILIA_SPEECH_TEXT_VERSION (2)
 
-typedef struct _AILIASpeechText{
-const char * text;
-float time_stamp_begin;
-float time_stamp_end;
-unsigned int person_id;	// Reserved
-const char * language;
-float confidence;
-}AILIASpeechText;
+/**
+ * \~japanese
+ * @def AILIA_SPEECH_TEXT_PERSON_ID_UNKNOWN
+ * @brief person_id が無効であることを示す値 (話者分離無効時などに設定される)
+ *
+ * \~english
+ * @def AILIA_SPEECH_TEXT_PERSON_ID_UNKNOWN
+ * @brief indicate that person_id is invalid (set when speaker separation is disabled, etc.)
+ */
+#define AILIA_SPEECH_TEXT_PERSON_ID_UNKNOWN 0xFFFFFFFF
+
+typedef struct _AILIASpeechText {
+	const char* text;
+	float time_stamp_begin;
+	float time_stamp_end;
+	unsigned int person_id;
+	const char* language;
+	float confidence;
+} AILIASpeechText;
 
 /****************************************************************
  * Speech2Text API
@@ -579,7 +604,7 @@ int AILIA_API ailiaSpeechOpenDictionaryFileW(struct AILIASpeech* net, const wcha
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  */
-int AILIA_API ailiaSpeechOpenPostProcessFileA(struct AILIASpeech* net, const char* encoder_path, const char* decoder_path, const char * source_path, const char * target_path, const char * prefix, int post_process_type);
+int AILIA_API ailiaSpeechOpenPostProcessFileA(struct AILIASpeech* net, const char* encoder_path, const char* decoder_path, const char* source_path, const char* target_path, const char* prefix, int post_process_type);
 
 /**
  * \~japanese
@@ -606,7 +631,49 @@ int AILIA_API ailiaSpeechOpenPostProcessFileA(struct AILIASpeech* net, const cha
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  */
-int AILIA_API ailiaSpeechOpenPostProcessFileW(struct AILIASpeech* net, const wchar_t* encoder_path, const wchar_t* decoder_path, const wchar_t * source_path, const wchar_t * target_path, const char * prefix, int post_process_type);
+int AILIA_API ailiaSpeechOpenPostProcessFileW(struct AILIASpeech* net, const wchar_t* encoder_path, const wchar_t* decoder_path, const wchar_t* source_path, const wchar_t* target_path, const char* prefix, int post_process_type);
+
+/**
+ * \~japanese
+ * @brief 話者分離に適用するAIモデルを指定します。(MBSC)
+ * @param net ネットワークオブジェクトポインタ
+ * @param segmentation_path onnxファイルのパス名(MBSC)
+ * @param embedding_path onnxファイルのパス名(MBSC)
+ * @param type AILIA_SPEECH_DIARIZATION_TYPE_PYANNOTE_AUDIO
+ * @return
+ *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+ *
+ * \~english
+ * @brief Set AI model for speaker diarization (MBSC)
+ * @param net A network instance pointer
+ * @param segmentation_path The path name to the onnx file (MBSC)
+ * @param embedding_path The path name to the onnx file (MBSC)
+ * @param type AILIA_SPEECH_DIARIZATION_TYPE_PYANNOTE_AUDIO
+ * @return
+ *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+ */
+int AILIA_API ailiaSpeechOpenDiarizationFileA(struct AILIASpeech* net, const char* segmentation_path, const char* embedding_path, int type);
+
+/**
+ * \~japanese
+ * @brief 話者分離に適用するAIモデルを指定します。(UTF16)
+ * @param net ネットワークオブジェクトポインタ
+ * @param segmentation_path onnxファイルのパス名(UTF16)
+ * @param embedding_path onnxファイルのパス名(UTF16)
+ * @param type AILIA_SPEECH_DIARIZATION_TYPE_PYANNOTE_AUDIO
+ * @return
+ *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+ *
+ * \~english
+ * @brief Set AI model for speaker diarization (UTF16)
+ * @param net A network instance pointer
+ * @param segmentation_path The path name to the onnx file (UTF16)
+ * @param embedding_path The path name to the onnx file (UTF16)
+ * @param type AILIA_SPEECH_DIARIZATION_TYPE_PYANNOTE_AUDIO
+ * @return
+ *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+ */
+int AILIA_API ailiaSpeechOpenDiarizationFileW(struct AILIASpeech* net, const wchar_t* segmentation_path, const wchar_t* embedding_path, int type);
 
 /**
  * \~japanese
@@ -626,7 +693,7 @@ int AILIA_API ailiaSpeechOpenPostProcessFileW(struct AILIASpeech* net, const wch
  * @param channels The number of pcm channels
  * @param samples The number of pcm samples per channel
  * @param sampling_rate The sampling rate (Hz)
-  * @return
+ * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  */
 int AILIA_API
@@ -669,7 +736,7 @@ ailiaSpeechFinalizeInputData(struct AILIASpeech* net);
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  */
-int AILIA_API ailiaSpeechBuffered(struct AILIASpeech* net, unsigned int *buffered);
+int AILIA_API ailiaSpeechBuffered(struct AILIASpeech* net, unsigned int* buffered);
 
 /**
  * \~japanese
@@ -687,7 +754,7 @@ int AILIA_API ailiaSpeechBuffered(struct AILIASpeech* net, unsigned int *buffere
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  */
 int AILIA_API
-ailiaSpeechComplete(struct AILIASpeech* net, unsigned int *complete);
+ailiaSpeechComplete(struct AILIASpeech* net, unsigned int* complete);
 
 /**
  * \~japanese
@@ -705,7 +772,7 @@ ailiaSpeechComplete(struct AILIASpeech* net, unsigned int *complete);
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  */
 int AILIA_API
-ailiaSpeechSetPrompt(struct AILIASpeech* net, const char *prompt);
+ailiaSpeechSetPrompt(struct AILIASpeech* net, const char* prompt);
 
 /**
  * \~japanese
@@ -725,7 +792,7 @@ ailiaSpeechSetPrompt(struct AILIASpeech* net, const char *prompt);
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  */
 int AILIA_API
-ailiaSpeechSetConstraint(struct AILIASpeech* net, const char *constraint, int type);
+ailiaSpeechSetConstraint(struct AILIASpeech* net, const char* constraint, int type);
 
 /**
  * \~japanese
@@ -747,7 +814,7 @@ ailiaSpeechSetConstraint(struct AILIASpeech* net, const char *constraint, int ty
  *   If you set "auto" to language, language will automatically detected.
  */
 int AILIA_API
-ailiaSpeechSetLanguage(struct AILIASpeech* net, const char *language);
+ailiaSpeechSetLanguage(struct AILIASpeech* net, const char* language);
 
 /**
  * \~japanese
@@ -800,7 +867,7 @@ ailiaSpeechSetSilentThreshold(struct AILIASpeech* net, float silent_threshold, f
  *   The string is valid until the next ailiaSpeech API function is called.
  */
 int AILIA_API
-ailiaSpeechSetIntermediateCallback(struct AILIASpeech* net, AILIA_SPEECH_USER_API_INTERMEDIATE_CALLBACK callback, void *handle);
+ailiaSpeechSetIntermediateCallback(struct AILIASpeech* net, AILIA_SPEECH_USER_API_INTERMEDIATE_CALLBACK callback, void* handle);
 
 /**
  * \~japanese
@@ -858,7 +925,7 @@ ailiaSpeechPostProcess(struct AILIASpeech* net);
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  */
 int AILIA_API
-ailiaSpeechGetTextCount(struct AILIASpeech* net, unsigned int *count);
+ailiaSpeechGetTextCount(struct AILIASpeech* net, unsigned int* count);
 
 /**
  * \~japanese
@@ -886,7 +953,7 @@ ailiaSpeechGetTextCount(struct AILIASpeech* net, unsigned int *count);
  *   The string is valid until the next ailiaSpeech API function is called.
  */
 int AILIA_API
-ailiaSpeechGetText(struct AILIASpeech* net, AILIASpeechText *text, unsigned int version, unsigned int idx);
+ailiaSpeechGetText(struct AILIASpeech* net, AILIASpeechText* text, unsigned int version, unsigned int idx);
 
 /**
  * \~japanese
@@ -916,7 +983,7 @@ ailiaSpeechGetText(struct AILIASpeech* net, AILIASpeechText *text, unsigned int 
  *   If idx is larger than ailiaSpeechGetTextCount, the internal buffer will be automatically expanded.
  */
 int AILIA_API
-ailiaSpeechSetText(struct AILIASpeech* net, const AILIASpeechText *text, unsigned int version, unsigned int idx);
+ailiaSpeechSetText(struct AILIASpeech* net, const AILIASpeechText* text, unsigned int version, unsigned int idx);
 
 /**
  * \~japanese
@@ -978,11 +1045,13 @@ const char* AILIA_API ailiaSpeechGetErrorDetail(struct AILIASpeech* net);
 #ifdef UNICODE
 #define ailiaSpeechOpenModelFile ailiaSpeechOpenModelFileW
 #define ailiaSpeechOpenVadFile ailiaSpeechOpenVadFileW
+#define ailiaSpeechOpenDiarizationFile ailiaSpeechOpenDiarizationFileW
 #define ailiaSpeechOpenDictionaryFile ailiaSpeechOpenDictionaryFileW
 #define ailiaSpeechOpenPostProcessFile ailiaSpeechOpenPostProcessFileW
 #else
 #define ailiaSpeechOpenModelFile ailiaSpeechOpenModelFileA
 #define ailiaSpeechOpenVadFile ailiaSpeechOpenVadFileA
+#define ailiaSpeechOpenDiarizationFile ailiaSpeechOpenDiarizationFileA
 #define ailiaSpeechOpenDictionaryFile ailiaSpeechOpenDictionaryFileA
 #define ailiaSpeechOpenPostProcessFile ailiaSpeechOpenPostProcessFileA
 #endif
