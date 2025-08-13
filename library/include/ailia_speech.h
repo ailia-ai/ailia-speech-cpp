@@ -402,20 +402,20 @@ struct AILIASpeech;
 
 /**
  * \~japanese
- * @def AILIA_SPEECH_TEXT_PERSON_ID_UNKNOWN
- * @brief person_id が無効であることを示す値 (話者分離無効時などに設定される)
+ * @def AILIA_SPEECH_SPEAKER_ID_UNKNOWN
+ * @brief speaker_id が無効であることを示す値 (話者分離無効時などに設定される)
  *
  * \~english
- * @def AILIA_SPEECH_TEXT_PERSON_ID_UNKNOWN
- * @brief indicate that person_id is invalid (set when speaker separation is disabled, etc.)
+ * @def AILIA_SPEECH_SPEAKER_ID_UNKNOWN
+ * @brief indicate that speaker_id is invalid (set when speaker separation is disabled, etc.)
  */
-#define AILIA_SPEECH_TEXT_PERSON_ID_UNKNOWN 0xFFFFFFFF
+#define AILIA_SPEECH_SPEAKER_ID_UNKNOWN 0xFFFFFFFF
 
 typedef struct _AILIASpeechText {
 	const char* text;
 	float time_stamp_begin;
 	float time_stamp_end;
-	unsigned int person_id;
+	unsigned int speaker_id;
 	const char* language;
 	float confidence;
 } AILIASpeechText;
