@@ -2,8 +2,8 @@
  * \~japanese
  * @file ailia_speech.h
  * @brief ailia Speech AI音声認識 ライブラリ
- * @copyright AXELL CORPORATION, ax Inc.
- * @date 2024/01/13
+ * @copyright AXELL CORPORATION, ailia Inc.
+ * @date 2025/12/18
  */
 
 #ifndef INCLUDED_AILIA_SPEECH
@@ -96,6 +96,17 @@ extern "C" {
  * @brief Whisper Large V3 model
  */
 #define AILIA_SPEECH_MODEL_TYPE_WHISPER_MULTILINGUAL_LARGE_V3 (5)
+
+/**
+ * \~japanese
+ * @def AILIA_SPEECH_MODEL_TYPE_SENSEVOICE_SMALL
+ * @brief SenseVoice Small model
+ *
+ * \~english
+ * @def AILIA_SPEECH_MODEL_TYPE_SENSEVOICE_SMALL
+ * @brief SenseVoice Small model
+ */
+#define AILIA_SPEECH_MODEL_TYPE_SENSEVOICE_SMALL (10)
 
 /****************************************************************
  * タスク定義
@@ -511,6 +522,8 @@ int AILIA_API ailiaSpeechOpenModelFileW(struct AILIASpeech* net, const wchar_t* 
  * @param vad_type AILIA_SPEECH_VAD_TYPE_*
  * @return
  *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+ * @details
+ *   VADを有効にするにはailiaSpeechSetSilentThresholdで判定しきい値を設定する必要があります。
  *
  * \~english
  * @brief Set vad model for voice activity detection.
@@ -519,6 +532,8 @@ int AILIA_API ailiaSpeechOpenModelFileW(struct AILIASpeech* net, const wchar_t* 
  * @param vad_type AILIA_SPEECH_VAD_TYPE_*
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+ * @details
+ *   To enable VAD, you need to set the detection threshold using ailiaSpeechSetSilentThreshold.
  */
 int AILIA_API ailiaSpeechOpenVadFileA(struct AILIASpeech* net, const char* vad_path, int vad_type);
 
@@ -530,6 +545,8 @@ int AILIA_API ailiaSpeechOpenVadFileA(struct AILIASpeech* net, const char* vad_p
  * @param vad_type AILIA_SPEECH_VAD_TYPE_*
  * @return
  *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+ * @details
+ *   VADを有効にするにはailiaSpeechSetSilentThresholdで判定しきい値を設定する必要があります。
  *
  * \~english
  * @brief Set vad model for voice activity detection.
@@ -538,6 +555,8 @@ int AILIA_API ailiaSpeechOpenVadFileA(struct AILIASpeech* net, const char* vad_p
  * @param vad_type AILIA_SPEECH_VAD_TYPE_*
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+ * @details
+ *   To enable VAD, you need to set the detection threshold using ailiaSpeechSetSilentThreshold.
  */
 int AILIA_API ailiaSpeechOpenVadFileW(struct AILIASpeech* net, const wchar_t* vad_path, int vad_type);
 
@@ -820,9 +839,9 @@ ailiaSpeechSetLanguage(struct AILIASpeech* net, const char* language);
  * \~japanese
  * @brief 無音判定の閾値を設定します。
  * @param net ネットワークオブジェクトポインタ
- * @param silent_threshold  有音判定のしきい値
- * @param speech_sec    有音区間の時間（秒数）
- * @param no_speech_sec 無音区間の時間（秒数）
+ * @param silent_threshold  有音判定のしきい値（標準値0.5）
+ * @param speech_sec    有音区間の時間（秒数）（標準値1.0）
+ * @param no_speech_sec 無音区間の時間（秒数）（標準値1.0）
  * @return
  *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す
  * @details
@@ -831,9 +850,9 @@ ailiaSpeechSetLanguage(struct AILIASpeech* net, const char* language);
  * \~english
  * @brief Set silent threshold.
  * @param net A network instance pointer
- * @param silent_threshold  volume threshold
- * @param speech_sec    speech time
- * @param no_speech_sec no_speech time
+ * @param silent_threshold  volume threshold (Standard value 0.5)
+ * @param speech_sec    speech time (sec) (Standard value 1.0)
+ * @param no_speech_sec no_speech time (sec) (Standard value 1.0)
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
  * @details
@@ -879,7 +898,7 @@ ailiaSpeechSetIntermediateCallback(struct AILIASpeech* net, AILIA_SPEECH_USER_AP
  *   認識した結果はailiaSpeechGetText APIで取得します。
  *
  * \~english
- * @brief Speech recognition
+ * @brief Perform speech recognition
  * @param net A network instance pointer
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
