@@ -600,7 +600,7 @@ int AILIA_API ailiaSpeechOpenDictionaryFileW(struct AILIASpeech* net, const wcha
 
 /**
  * \~japanese
- * @brief 後処理知に適用するAIモデルを指定します。(MBSC)
+ * @brief 後処理に適用するAIモデルを指定します。(MBSC)
  * @param net ネットワークオブジェクトポインタ
  * @param encoder_path onnxファイルのパス名(MBSC)
  * @param decoder_path onnxファイルのパス名(MBSC)
@@ -627,7 +627,7 @@ int AILIA_API ailiaSpeechOpenPostProcessFileA(struct AILIASpeech* net, const cha
 
 /**
  * \~japanese
- * @brief 後処理知に適用するAIモデルを指定します。(UTF16)
+ * @brief 後処理に適用するAIモデルを指定します。(UTF16)
  * @param net ネットワークオブジェクトポインタ
  * @param encoder_path onnxファイルのパス名(UTF16)
  * @param decoder_path onnxファイルのパス名(UTF16)
