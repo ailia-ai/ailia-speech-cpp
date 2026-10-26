@@ -179,10 +179,12 @@ extern "C" {
  * \~japanese
  * @def AILIA_SPEECH_FLAG_LIVE
  * @brief ライブ変換モードを有効にします
+ * @details 話者分離と併用できます。
  *
  * \~english
  * @def AILIA_SPEECH_FLAG_LIVE
  * @brief Enable live transcribe mode
+ * @details Can be used with speaker diarization.
  */
 #define AILIA_SPEECH_FLAG_LIVE (1)
 
@@ -477,6 +479,8 @@ int AILIA_API ailiaSpeechCreate(struct AILIASpeech** net, int env_id, int num_th
  * @param model_type AILIA_SPEECH_MODEL_TYPE_*
  * @return
  *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+ * @details
+ *   Qualcomm NPU（QNN）で実行する場合は、encoder_pathとdecoder_pathの両方に同じ.qnnパッケージを指定します。
  *
  * \~english
  * @brief Set models into a network instance.
@@ -486,6 +490,8 @@ int AILIA_API ailiaSpeechCreate(struct AILIASpeech** net, int env_id, int num_th
  * @param model_type AILIA_SPEECH_MODEL_TYPE_*
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+ * @details
+ *   To run on the Qualcomm NPU (QNN), pass the same .qnn package as both encoder_path and decoder_path.
  */
 int AILIA_API ailiaSpeechOpenModelFileA(struct AILIASpeech* net, const char* encoder_path, const char* decoder_path, int model_type);
 
@@ -500,6 +506,8 @@ int AILIA_API ailiaSpeechOpenModelFileA(struct AILIASpeech* net, const char* enc
  * @param flag AILIA_SPEECH_FLAG_*の論理和
  * @return
  *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+ * @details
+ *   Qualcomm NPU（QNN）で実行する場合は、encoder_pathとdecoder_pathの両方に同じ.qnnパッケージを指定します。
  *
  * \~english
  * @brief Set models into a network instance.
@@ -511,6 +519,8 @@ int AILIA_API ailiaSpeechOpenModelFileA(struct AILIASpeech* net, const char* enc
  * @param flag OR of AILIA_SPEECH_FLAG_*
  * @return
  *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+ * @details
+ *   To run on the Qualcomm NPU (QNN), pass the same .qnn package as both encoder_path and decoder_path.
  */
 int AILIA_API ailiaSpeechOpenModelFileW(struct AILIASpeech* net, const wchar_t* encoder_path, const wchar_t* decoder_path, int model_type);
 
