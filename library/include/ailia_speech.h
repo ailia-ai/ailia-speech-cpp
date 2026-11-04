@@ -3,7 +3,7 @@
  * @file ailia_speech.h
  * @brief ailia Speech AI音声認識 ライブラリ
  * @copyright AXELL CORPORATION, ailia Inc.
- * @date 2025/12/18
+ * @date 2026/10/30
  */
 
 #ifndef INCLUDED_AILIA_SPEECH
@@ -769,6 +769,45 @@ int AILIA_API ailiaSpeechBuffered(struct AILIASpeech* net, unsigned int* buffere
 
 /**
  * \~japanese
+ * @brief VADで発話の区切りが検出されたかどうかを判定します。
+ * @param net ネットワークオブジェクトポインタ
+ * @param buffered 検出フラグ（1で検出、0で未検出）
+ * @return
+ *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+ * @details
+ *   ailiaSpeechBufferedと異なり、30秒分のデータが蓄積されても1を返さず、
+ *   speech_sec以上の発話の後にno_speech_sec以上の無音が続いた場合にのみ1を返します。
+ *   ボイスコマンドの待ち受けなど、発話単位で認識を行う場合に使用します。
+ *   発話開始前の無音と、speech_secに満たない雑音は破棄されるため、長い無音の後の発話も先頭から認識されます。
+ *   ailiaSpeechFinalizeInputDataを呼び出した場合は、区切りがなくても1を返します。
+ *   発話が続く間は区切りが検出されるまでデータを蓄積します。ailiaSpeechTranscribeは1回あたり最大30秒を処理するため、
+ *   30秒を超える発話は1が返される間ailiaSpeechTranscribeを繰り返し呼び出すことで処理されます。
+ *   蓄積する長さを制限する場合は、ailiaSpeechGetPositionで未処理のフレーム数を確認してください。
+ *   事前にailiaSpeechSetSilentThresholdで判定しきい値を設定する必要があります。
+ *   1が返された場合はailiaSpeechTranscribeを呼び出してください。
+ *
+ * \~english
+ * @brief Determines whether the end of an utterance has been detected by VAD.
+ * @param net A network instance pointer
+ * @param buffered Is detected (1 : Detected, 0 : Not Detected)
+ * @return
+ *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+ * @details
+ *   Unlike ailiaSpeechBuffered, this function does not return 1 just because 30 seconds worth of data has been accumulated.
+ *   It returns 1 only when speech of speech_sec or longer is followed by silence of no_speech_sec or longer.
+ *   Use this function to recognize audio per utterance, such as waiting for voice commands.
+ *   Silence before the utterance and noise shorter than speech_sec are discarded, so speech after a long silence is recognized from its beginning.
+ *   It also returns 1 without a boundary after ailiaSpeechFinalizeInputData is called.
+ *   While speech continues, data is accumulated until a boundary is detected. Since ailiaSpeechTranscribe processes at most 30 seconds per call,
+ *   speech longer than 30 seconds is processed by calling ailiaSpeechTranscribe repeatedly while this function returns 1.
+ *   To limit the accumulated length, check the number of unprocessed frames with ailiaSpeechGetPosition.
+ *   The detection threshold must be set in advance using ailiaSpeechSetSilentThreshold.
+ *   When 1 is returned, call ailiaSpeechTranscribe.
+ */
+int AILIA_API ailiaSpeechVadBuffered(struct AILIASpeech* net, unsigned int* buffered);
+
+/**
+ * \~japanese
  * @brief 全てのデータの処理が完了したかどうかを判定します。
  * @param net ネットワークオブジェクトポインタ
  * @param complete 完了フラグ（1で完了、0で完了していない）
@@ -1070,6 +1109,60 @@ int AILIA_API ailiaSpeechResetTranscribeState(struct AILIASpeech* net);
  *   If model is encrypted, this function returns empty string.
  */
 const char* AILIA_API ailiaSpeechGetErrorDetail(struct AILIASpeech* net);
+
+/**
+ * \~japanese
+ * @brief 現在の端末に対応するQNNモデル名を取得します。
+ * @param model_name QNNモデル名の格納先（例: "sm8475"）。返された文字列は
+ *   libraryが所有するため、呼び出し側で解放しないでください。
+ * @return
+ *   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+ * @details
+ *   返される名前はailia_speech_compile_qnnが生成する.qnnパッケージのファイル名に
+ *   含まれるSoC名と一致します。
+ *   この呼び出しでQNN plug-in（ailia_speech_qnn）を初めて遅延loadします。
+ *   未対応SoCでは \ref AILIA_STATUS_OTHER_ERROR 、plug-inが存在しない場合は
+ *   \ref AILIA_STATUS_UNIMPLEMENTED を返します。
+ *
+ * \~english
+ * @brief Gets the QNN model name for the current device.
+ * @param model_name Storage for the QNN model name (for example, "sm8475").
+ *   The library owns the returned string; the caller must not free it.
+ * @return
+ *   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+ * @details
+ *   The returned name matches the SoC name in the .qnn package filenames emitted by
+ *   ailia_speech_compile_qnn.
+ *   This call lazily loads the QNN plug-in (ailia_speech_qnn).
+ *   An unsupported SoC returns \ref AILIA_STATUS_OTHER_ERROR. A missing plug-in returns
+ *   \ref AILIA_STATUS_UNIMPLEMENTED.
+ */
+int AILIA_API ailiaSpeechGetQNNModelName(const char** model_name);
+
+/**
+ * \~japanese
+ * @brief QNNのグラフスイッチングを設定します。
+ * @param net ネットワークインスタンスのポインタ
+ * @param enable 0: 無効（既定値）、1: 有効
+ * @return 成功時は \ref AILIA_STATUS_SUCCESS 、引数が不正な場合は
+ *   \ref AILIA_STATUS_INVALID_ARGUMENT 、モデルを開いた後は \ref AILIA_STATUS_INVALID_STATE 。
+ * @details
+ *   ailiaSpeechCreateの後、ailiaSpeechOpenModelFileの前に呼び出してください。
+ *   .qnnモデルのグラフを必要に応じて切り替え、HTPの常駐メモリを削減します。
+ *   切り替えにより推論時間が増える場合があります。ONNXモデルには影響しません。
+ *
+ * \~english
+ * @brief Configures QNN graph switching.
+ * @param net The network instance pointer
+ * @param enable 0: disabled (default), 1: enabled
+ * @return \ref AILIA_STATUS_SUCCESS on success, \ref AILIA_STATUS_INVALID_ARGUMENT
+ *   for invalid arguments, or \ref AILIA_STATUS_INVALID_STATE after opening a model.
+ * @details
+ *   Call after ailiaSpeechCreate and before ailiaSpeechOpenModelFile.
+ *   Graphs in a .qnn model are switched on demand to reduce resident HTP memory.
+ *   Switching may increase inference time. ONNX models are unaffected.
+ */
+int AILIA_API ailiaSpeechSetQNNGraphSwitching(struct AILIASpeech* net, int enable);
 
 #ifdef UNICODE
 #define ailiaSpeechOpenModelFile ailiaSpeechOpenModelFileW
